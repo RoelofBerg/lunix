@@ -1,47 +1,66 @@
-#include <linux/module.h>    // included for all kernel modules
-#include <linux/kernel.h>    // included for KERN_INFO
-#include <linux/init.h>      // included for __init and __exit macros
-#include <linux/proc_fs.h>
-#include <linux/seq_file.h>
+#include <linux/module.h>
+#include <linux/init.h>
+#include <linux/kernel.h>
 
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Roelof");
-MODULE_DESCRIPTION("A Simple Hello World module");
+#include <linux/types.h>   // for dev_t typedef
+#include <linux/kdev_t.h>  // for format_dev_t
+#include <linux/fs.h>      // for alloc_chrdev_region()
+#include <linux/cdev.h>
+#include <asm/uaccess.h>
 
-static int
-hello_proc_show(struct seq_file *m, void *v)
+static dev_t mydev;             // (major,minor) value
+static char buffer[64];         // optional, for debugging
+
+static char output[] = "Hello world\n";
+
+ssize_t my_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
 {
-    seq_printf(m, "Hello Kernel\n");
+    printk(KERN_INFO "In chardrv read routine.\n");
+    printk(KERN_INFO "Count field is %lu.\n", (unsigned long)count);
+    printk(KERN_INFO "Offset is %lu.\n", (unsigned long)*f_pos);
+
+    if (output[*f_pos] == '\0') {
+        printk(KERN_INFO "End of string, returning zero.\n");
+        return 0;
+    }
+
+    if (copy_to_user(buf, &output[*f_pos], 1)) {
+      *f_pos += 1;
+      return 1;  // returned a single character
+    }
+    else return 0;
+}
+
+struct cdev my_cdev;
+
+struct file_operations my_fops = {
+    .owner = THIS_MODULE,
+    .read = my_read,
+};
+
+static int __init chardrv_in(void)
+{
+    printk(KERN_INFO "module chardrv being loaded.\n");
+
+    alloc_chrdev_region(&mydev, 0, 1, "luna");
+    printk(KERN_INFO "%s\n", format_dev_t(buffer, mydev));
+
+    cdev_init(&my_cdev, &my_fops);
+    my_cdev.owner = THIS_MODULE;
+    cdev_add(&my_cdev, mydev, 1);
+
     return 0;
 }
 
-static int
-hello_proc_open(struct inode *inode, struct file *file)
+static void __exit chardrv_out(void)
 {
-    return single_open(file, hello_proc_show, NULL);
+    printk(KERN_INFO "module chardrv being unloaded.\n");
+
+    unregister_chrdev_region(mydev, 1);
 }
 
-static const struct file_operations hello_proc_fops = {
-    .owner      = THIS_MODULE,
-    .open       = hello_proc_open,
-    .read       = seq_read,
-    .llseek     = seq_lseek,
-    .release    = single_release,
-};
+module_init(chardrv_in);
+module_exit(chardrv_out);
 
-static int __init hello_init(void)
-{
-    printk(KERN_INFO "Hello world!\n");
-    proc_create("hello_world", 0, NULL, &hello_proc_fops);
-    return 0;    // Non-zero return means that the module couldn't be loaded.
-}
-
-static void __exit hello_cleanup(void)
-{
-    printk(KERN_INFO "Cleaning up module.\n");
-    remove_proc_entry("hello_world", NULL);
-}
-
-module_init(hello_init);
-module_exit(hello_cleanup);
-
+MODULE_AUTHOR("Robert P. J. Day, http://crashcourse.ca");
+MODULE_LICENSE("GPL");

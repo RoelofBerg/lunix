@@ -9,7 +9,7 @@ CROSS_COMPILE := arm-linux-gnueabihf-
 obj-m := $(MODULES)
 
 #Path of the udoo-neo kernel
-KDIR := /home/linux/kernel/udooneo-dev/linux_kernel/
+KDIR := /home/franz/udooneo-dev/linux_kernel/
 
 #A macro for convenience (less typing below)
 MAKEARCH := $(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
