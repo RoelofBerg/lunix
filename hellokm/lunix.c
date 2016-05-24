@@ -24,7 +24,7 @@ ssize_t my_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos
         return 0;
     }
 
-    if (copy_to_user(buf, &output[*f_pos], 1)) {
+    if (copy_to_user(buf, &output[*f_pos], 1) == 0) {
       *f_pos += 1;
       return 1;  // returned a single character
     }
