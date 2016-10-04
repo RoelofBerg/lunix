@@ -1,0 +1,36 @@
+Easy aproach:
+
+To compile the kernel module execute:
+make modules
+
+Then copy the .ko file to the target and execute:
+insmod /path/to/module/lunix.ko
+
+
+Alternative (higher quality):
+Copy the driver source into the kernel's directory
+( See http://stackoverflow.com/questions/11710022/adding-new-driver-code-to-linux-source-code
+
+  You need to add a config option in the Kconfig file of the kernel source subdirectory in which your device driver will be put. You also need to add lines to the Makefile of that directory. Obviously you need to copy the source files to that directory too.
+
+  Since your driver depends on the ARM architecture, in the Kconfig, you need to put an option of 'depends on' like:
+
+  config SND_ARMAACI
+  tristate "ARM PrimeCell PL041 AC Link support"
+  depends on ARM_AMBA
+
+  and your Makefile will look like
+
+  obj-$(CONFIG_SND_ARMAACI)   += snd-aaci.o
+  snd-aaci-objs       := aaci.o
+
+  So now when you do a make menuconfig in your kernel source tree, you will find the config option you put in the Kconfig and you will be able to select it to be compiled into the kernel or built as a module or not compiled at all.
+
+  Look for examples in the subsystem directory your driver is meant for.
+)
+
+Then execute 'make modules CROSS ...' for your kernel (remember ? We did this in the very beginning too).
+Copy all kernel modules to the target.
+Then on the target use "modprobe drivername" to load your driver
+Advantage: Automatically resolves driver interdependencies, 'official' aproach
+
