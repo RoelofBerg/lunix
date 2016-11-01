@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Linux Kernel
 linux_kernel
 
@@ -6,11 +7,19 @@ linux_kernel
 *.ko
 *.obj
 *.elf
+=======
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+>>>>>>> a22904f7a7a1dfcd8458c6cafab8c74e4c6db333
 
 # Precompiled Headers
 *.gch
 *.pch
 
+<<<<<<< HEAD
 # Libraries
 *.lib
 *.a
@@ -22,14 +31,33 @@ linux_kernel
 *.so
 *.so.*
 *.dylib
+=======
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+>>>>>>> a22904f7a7a1dfcd8458c6cafab8c74e4c6db333
 
 # Executables
 *.exe
 *.out
 *.app
+<<<<<<< HEAD
 *.i*86
 *.x86_64
 *.hex
 
 # Debug files
 *.dSYM/
+=======
+>>>>>>> a22904f7a7a1dfcd8458c6cafab8c74e4c6db333
