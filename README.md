@@ -1,13 +1,5 @@
 # lunix
-<<<<<<< HEAD
 
-This project contains source code and training material for an Embedded Linux seminar held in 2016 in Lübeck, Germany.
-
-Everyone's welcome to contribute to the source-code here or to report improvements and bug-fixes.
-
-The final software will be an inverse pendulum for the UDOO NEO board. The pendulum will be simulated by the Android M4 core and the i.mx6 core will control it, as if it would be real hardware. (We jumper the Arduino pins to the i.mx6 pins - this gives a most realistic environment for Linux driver programming excercises).
+This project contains source code and training material for a bi-annual Embedded Linux seminar held in Lübeck, Germany. Lessons and exercises can be found in the Wiki (see above in the menu).
 
 Contact: rberg@berg-solutions.de
-=======
-Material für die Embedded Linux Schulung in Luna
->>>>>>> a22904f7a7a1dfcd8458c6cafab8c74e4c6db333
