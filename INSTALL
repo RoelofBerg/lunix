@@ -83,7 +83,7 @@ mkdir ~/dev/udoo-community-bsp
 cd ~/dev/udoo-community-bsp
 repo init -u https://github.com/graugans/fsl-community-bsp-platform -b morty
 repo sync
-cp ~/tmp/udoo-community-bsp/downloads ~/dev/udoo-community-bsp
+cp -R ~/tmp/udoo-community-bsp/downloads ~/dev/udoo-community-bsp
 
 = Prepare Toaster ==================================
 From: http://www.yoctoproject.org/docs/2.2/toaster-manual/toaster-manual.html
@@ -98,7 +98,7 @@ and micro USB-Cable (for power and connectivity), plus example hardware (buzzer)
 Pre-Flash the SD-Card with the official UDOO NEO image downloaded above.
 
 Finally all content of ~/dev can be transferred to the training PCs. Purpose: Pre-Downloaded prerequisites for speed and reliability (when old versions vanish or servers are down during the lesson).
-Size: About 80 MB
+Size: About 5 GB
 Also all steps of 'Prepare System' above have to be executed again on the training PC
 To save time all builds can be run one by executing (on the training PC !):
 
