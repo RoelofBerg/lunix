@@ -1,7 +1,8 @@
 Install Ubuntu 16.04 LTS 64 Bit on the PC of the trainer and the scolars.
-Tested on: 8 GB Ram, needed 48 GB for the whole system (so 64 GB should be min.).
+Tested on: 8 GB Ram, needed 48 GB for the whole system, so 64 GB free SDD
+space should be the minimum for the trainer PC and the scoar PCs.
 
-Begin on the PC of the trainer:
+*** Begin on the PC of the trainer: ****************************************
 
 = Prepare System ==================================
 =============================================
@@ -104,8 +105,14 @@ MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
 source toaster start
 Open the Toaster GUI in a browser: http://127.0.0.1:8000
 
-= Prepare PCs ====================================
+= Compress =====================================
 =============================================
+tar -cf lunix.tgz --use-compress-prog=pbzip2 dev
+
+Copy lunix.tgz on a media (like usb stick)
+
+*** Now on each PC of the scolars: ****************************************
+
 For every PC set up a UDOO NEO target hardwre with SD-Card UART-USB-Connector
 and micro USB-Cable (for power and connectivity), plus example hardware (buzzer).
 Pre-Flash the SD-Card with the official UDOO NEO image downloaded above.
@@ -113,9 +120,14 @@ Pre-Flash the SD-Card with the official UDOO NEO image downloaded above.
 Finally all content of ~/dev can be transferred to the training PCs to ~/dev.
 Purpose: Pre-Downloaded prerequisites for speed and reliability (when old versions
 vanish or servers are down during the lesson).
-Size: About 5 GB
+Extracted size: About 4.5 GB (folder will grow to about 20 GB during the training)
+
+sudo apt-get install pbzip2
+cd ~
+tar -xf lunix.tgz --use-compress-prog=pbzip2 dev
 
 Prepare system:
+
 sudo apt-get update
 # General tools
 sudo apt-get install git git-gui putty nano scite texinfo chrpath gawk wget git \
