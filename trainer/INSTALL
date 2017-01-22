@@ -1,6 +1,7 @@
 Install Ubuntu 16.04 LTS 64 Bit on the PC of the trainer and the scolars.
 Tested on: 8 GB Ram, needed 48 GB for the whole system, so 64 GB free SDD
 space should be the minimum for the trainer PC and the scoar PCs.
+(We also need 2 times the size of the transfer file as space for the file transfer)
 
 *** Begin on the PC of the trainer: ****************************************
 
@@ -107,9 +108,14 @@ Open the Toaster GUI in a browser: http://127.0.0.1:8000
 
 = Compress =====================================
 =============================================
-tar -cf lunix.tgz --use-compress-prog=pbzip2 dev
+mkdir ~/trans
+cd ~/trans
+tar -cf lunix.tgz --use-compress-prog=pbzip2 ~/dev
+md5sum lunix.tgz > lunix.md5
+split --bytes=1G lunix.tgz .
+rm lunix.tgz
 
-Copy lunix.tgz on a media (like usb stick)
+Copy all files in ~/transfer on a media (like usb stick)
 
 *** Now on each PC of the scolars: ****************************************
 
@@ -123,8 +129,16 @@ vanish or servers are down during the lesson).
 Extracted size: About 4.5 GB (folder will grow to about 20 GB during the training)
 
 sudo apt-get install pbzip2
-cd ~
-tar -xf lunix.tgz --use-compress-prog=pbzip2 dev
+mkdir ~/transfer
+# Copy all files from the transfer medium to ~/transfer
+cd ~/transfer
+cat lunixa* > lunix.tgz
+md5sum lunix.tgz
+cat lunix.md5
+# Compare the two hashes, it must be equal
+rm -rf lunixa*
+tar -xf lunix.tgz --use-compress-prog=pbzip2 ~/dev
+#leave the .tgz there for later courses or backup-recovery
 
 Prepare system:
 
