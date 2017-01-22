@@ -1,5 +1,5 @@
 Install Ubuntu 16.04 LTS 64 Bit on the PC of the trainer and the scolars.
-Tested on: 8 GB Ram and 100 GB SDD.
+Tested on: 8 GB Ram, needed 48 GB for the whole system (so 64 GB should be min.).
 
 Begin on the PC of the trainer:
 
@@ -16,7 +16,11 @@ sudo apt-get install texinfo chrpath gawk
 # For custom Linux Kernel Build
 sudo apt-get install gawk wget git diffstat unzip texinfo gcc-multilib \
      build-essential chrpath socat libsdl1.2-dev xterm picocom ncurses-dev lzop \
-     gcc-arm-linux-gnueabihf
+     libncurses-dev
+#And afterwards (!)
+sudo apt-get install gcc-arm-linux-gnueabihf
+#For toaster
+sudo apt-get install pip3
 # OI: Ignore error about gcc-arm-linux-gnueabihf ?
 # Configuration     
 git config --global user.email "lunix@draeger.com"
@@ -45,16 +49,18 @@ git clone https://github.com/RoelofBerg/lunix.git
 ============================================
 cd ~/dev
 git clone https://github.com/UDOOboard/linux_kernel
-cd ~/tmp
-git clone https://github.com/UDOOboard/linux_kernel
+cp -R linux_kernel ~/tmp
 cd ~/tmp/linux_kernel
 
 Test the kernel:
 ARCH=arm make udoo_neo_defconfig
 ARCH=arm make menuconfig
 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make zImage -j8
+#Takes 2 minutes
 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make dtbs -j8
+#Takes a few seconds
 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make modules -j8
+#Takes 
 BOOT_PARTITION=/path/to/boot-partition
 ROOT_PARTITION=/path/to/root-partition
 cp arch/arm/boot/zImage $BOOT_PARTITION
@@ -74,22 +80,29 @@ mkdir ~/tmp/udoo-community-bsp
 cd ~/tmp/udoo-community-bsp
 repo init -u https://github.com/graugans/fsl-community-bsp-platform -b morty
 repo sync
+cp -R ~/tmp/udoo-community-bsp ~/dev
 MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
 MACHINE=udooneo bitbake udoo-image-full-cmdline
 
-Wait about two hours for completion and check the output for success.
+Wait about 1.5 hours for completion and check the output for success. Then copy all
+downloads to the dev area.
 
-mkdir ~/dev/udoo-community-bsp
-cd ~/dev/udoo-community-bsp
-repo init -u https://github.com/graugans/fsl-community-bsp-platform -b morty
-repo sync
 cp -R ~/tmp/udoo-community-bsp/downloads ~/dev/udoo-community-bsp
 
 = Prepare Toaster ==================================
 From: http://www.yoctoproject.org/docs/2.2/toaster-manual/toaster-manual.html
 =============================================
 
-#AI: ............. T O D O ....................
+cd ~/dev/udoo-community-bsp
+MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
+sudo pip3 install -r ~/dev/udoo-community-bsp/sources/poky/bitbake/toaster-requirements.txt
+
+#Test
+!!! OPEN A NEW CONSOLE WINDOW !!!
+cd ~/dev/udoo-community-bsp
+MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
+source toaster start
+Open the Toaster GUI in a browser: http://127.0.0.1:8000
 
 = Prepare PCs ====================================
 =============================================
@@ -97,10 +110,26 @@ For every PC set up a UDOO NEO target hardwre with SD-Card UART-USB-Connector
 and micro USB-Cable (for power and connectivity), plus example hardware (buzzer).
 Pre-Flash the SD-Card with the official UDOO NEO image downloaded above.
 
-Finally all content of ~/dev can be transferred to the training PCs. Purpose: Pre-Downloaded prerequisites for speed and reliability (when old versions vanish or servers are down during the lesson).
+Finally all content of ~/dev can be transferred to the training PCs to ~/dev.
+Purpose: Pre-Downloaded prerequisites for speed and reliability (when old versions
+vanish or servers are down during the lesson).
 Size: About 5 GB
-Also all steps of 'Prepare System' above have to be executed again on the training PC
-To save time all builds can be run one by executing (on the training PC !):
+
+Prepare system:
+sudo apt-get update
+# General tools
+sudo apt-get install git git-gui putty nano scite texinfo chrpath gawk wget git \
+     diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev \
+     xterm picocom ncurses-dev lzop libncurses-dev pip3
+#And afterwards (!)
+sudo apt-get install gcc-arm-linux-gnueabihf
+git config --global user.email "lunix@draeger.com"
+git config --global user.name "Lunix Luna"
+
+#Toaster: (Install prerequisites)
+cd ~/dev/udoo-community-bsp
+MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
+sudo pip3 install -r ~/dev/udoo-community-bsp/sources/poky/bitbake/bitbake/toaster-requirements.txt
 
 #Linux Kernel:
 cd ~/dev/linux_kernel
@@ -108,13 +137,16 @@ ARCH=arm make udoo_neo_defconfig
 ARCH=arm make menuconfig
 (save and exit)
 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make zImage -j8
+#Takes 2? minutes
 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make dtbs -j8
+#Takes a few seconds
 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make modules -j8
+#Takes 2? minutes
 
 #Yocto:
 cd ~/dev/udoo-community-bsp
 MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
 MACHINE=udooneo bitbake udoo-image-full-cmdline
-(Wait at about 2 hours and check the output for success)
+(Wait about 1.5? hours and check the output for success)
 
 Then to enforce building, deleting the following files enforces compilation again:
