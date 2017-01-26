@@ -128,16 +128,21 @@ Purpose: Pre-Downloaded prerequisites for speed and reliability (when old versio
 vanish or servers are down during the lesson).
 Extracted size: About 4.5 GB (folder will grow to about 20 GB during the training)
 
+mkdir ~/dev
+cd ~/dev
+
 sudo apt-get install pbzip2
 mkdir ~/transfer
 # Copy all files from the transfer medium to ~/transfer
 cd ~/transfer
+cp /media/dozent03/UBUNTU\ 16_0/TRANSFER/* ~/transfer
 cat lunixa* > lunix.tgz
 md5sum lunix.tgz
 cat lunix.md5
 # Compare the two hashes, it must be equal
 rm -rf lunixa*
-tar -xf lunix.tgz --use-compress-prog=pbzip2 ~/dev
+cd ~/dev
+tar -xf ~/transfer/lunix.tgz --use-compress-prog=pbzip2
 #leave the .tgz there for later courses or backup-recovery
 
 Prepare system:
