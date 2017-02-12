@@ -115,7 +115,8 @@ md5sum lunix.tgz > lunix.md5
 split --bytes=1G lunix.tgz .
 rm lunix.tgz
 
-Copy all files in ~/transfer on a media (like usb stick)
+Copy all files in ~/transfer on a media (like usb stick) and copy the script setup.sh
+of this repo to the media. Preferably a USB-installable Ubuntu 16.04 with a folder TRANSFER.
 
 *** Now on each PC of the scolars: ****************************************
 
@@ -128,51 +129,19 @@ Purpose: Pre-Downloaded prerequisites for speed and reliability (when old versio
 vanish or servers are down during the lesson).
 Extracted size: About 4.5 GB (folder will grow to about 20 GB during the training)
 
-sudo apt-get install pbzip2
-mkdir ~/transfer
-# Copy all files from the transfer medium to ~/transfer
-cd ~/transfer
-cat lunixa* > lunix.tgz
-md5sum lunix.tgz
-cat lunix.md5
-# Compare the two hashes, it must be equal
-rm -rf lunixa*
-tar -xf lunix.tgz --use-compress-prog=pbzip2 ~/dev
-#leave the .tgz there for later courses or backup-recovery
+Copy the script 'setup.sh' of the USB stick's TRANSFER folder to the home folder (~).
 
-Prepare system:
+Doubleclick the script, edit the pc name in line 19.
 
-sudo apt-get update
-# General tools
-sudo apt-get install git git-gui putty nano scite texinfo chrpath gawk wget git \
-     diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev \
-     xterm picocom ncurses-dev lzop libncurses-dev pip3
-#And afterwards (!)
-sudo apt-get install gcc-arm-linux-gnueabihf
-git config --global user.email "lunix@draeger.com"
-git config --global user.name "Lunix Luna"
+Open a shell (start menu "CMD")
 
-#Toaster: (Install prerequisites)
-cd ~/dev/udoo-community-bsp
-MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
-sudo pip3 install -r ~/dev/udoo-community-bsp/sources/poky/bitbake/bitbake/toaster-requirements.txt
+Execute:
+chmod +x setup.sh
+./setup.sh
 
-#Linux Kernel:
-cd ~/dev/linux_kernel
-ARCH=arm make udoo_neo_defconfig
-ARCH=arm make menuconfig
-(save and exit)
-ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make zImage -j8
-#Takes 2? minutes
-ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make dtbs -j8
-#Takes a few seconds
-ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make modules -j8
-#Takes 2? minutes
+After a few minutes you see "YOU CAN REMOVE THE USB STICK NOW". Then you can remove
+the USB stick and continue on another PC.
 
-#Yocto:
-cd ~/dev/udoo-community-bsp
-MACHINE=udooneo DISTRO=fslc-framebuffer source ./setup-environment build
-MACHINE=udooneo bitbake udoo-image-full-cmdline
-(Wait about 1.5? hours and check the output for success)
+After about 15 minutes you'll be asked for licence agreements. Scroll down, press 'Y' and
+wait a few hours for the process to complete.
 
-Then to enforce building, deleting the following files enforces compilation again:
