@@ -1,0 +1,30 @@
+
+Copy the script 'setup.sh' of the USB stick's TRANSFER folder to the home folder (~).
+Leave internet connection active during the whole time.
+
+Doubleclick the script "setup.sh", edit the pc name in line 19.
+Save changes
+
+Open a shell (start menu "CMD")
+
+Execute:
+chmod +x setup.sh
+./setup.sh
+
+
+# 2x Updates o.Ä. müssen mit "Y" bestätigt werden
+
+
+After a few minutes you see "YOU CAN REMOVE THE USB STICK NOW". Then you can remove
+the USB stick and continue on another PC.
+
+Press return to continue after the USB stick has been removed.
+
+After about 15 minutes you'll be asked for licence agreements. Scroll down, press 'Y' and
+wait a few hours for the process to complete.
+
+When the process completed you see something like "x preocesses successfully executed, y processes didn't need to rerun". If (and only if) an error message appears instead, you can re-try the compilation procedure (again, leave internet active) with the following script
+
+chmod +x nachbrenner.sh 
+./nachbrenner.sh 
+
