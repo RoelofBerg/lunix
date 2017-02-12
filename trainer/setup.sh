@@ -8,7 +8,7 @@
 sudo apt-get update
 sudo apt-get install git git-gui putty nano scite texinfo chrpath gawk wget git \
      diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev \
-     xterm picocom ncurses-dev lzop libncurses-dev python3-pip pbzip2
+     xterm picocom ncurses-dev lzop libncurses-dev python3-pip pbzip2 arduino
 # The following must happen afterwards
 sudo apt-get install gcc-arm-linux-gnueabihf
 
