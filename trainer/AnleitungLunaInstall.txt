@@ -28,3 +28,11 @@ When the process completed you see something like "x preocesses successfully exe
 chmod +x nachbrenner.sh 
 ./nachbrenner.sh 
 
+Ok, very good, now to the next PC :)
+
+----------
+
+Remarks for Roelof only:
+You may also want to reinstall all SD cards by using:
+umount /dev/sd<disk>?; bzcat udoo-image-qt5-udooqdl.wic.bz2 | sudo dd of=/dev/<disk> bs=32M
+
