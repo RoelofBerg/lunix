@@ -34,5 +34,10 @@ Ok, very good, now to the next PC :)
 
 Remarks for Roelof only:
 You may also want to reinstall all SD cards by using:
-umount /dev/sd<disk>?; bzcat udoo-image-qt5-udooqdl.wic.bz2 | sudo dd of=/dev/<disk> bs=32M
+Find out drive letter (df-h or dmesg)
+sudo umount /dev/sd_1
+sudo umount /dev/sd_2
+sudo dd bs=1M if=udoobuntu-udoo-neo-minimal_2.1.2.img of=/dev/sd_
+sync
+
 
